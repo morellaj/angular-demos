@@ -1,32 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { StarWarsApiService } from 'src/app/services/star-wars-api.service';
 import { StarWarsPlaceService } from 'src/app/services/star-wars-place.service';
-import { SomePageState } from './some-page.state';
-
-interface ISomePageSandbox {
-  person$: Observable<any>;
-  place$: Observable<any>;
-  personId$: Observable<any>;
-  placeId$: Observable<any>;
-  getPerson: (id: number) => void;
-  getPlace: (id: number) => void;
-  iteratePersonId: () => void;
-  iteratePlaceId: () => void;
-}
 
 @Injectable({
   providedIn: 'any',
 })
-export class SomePageSandbox implements ISomePageSandbox {
+export class SomePageViewModel {
+  private _person$ = new BehaviorSubject<any>(null);
+  private _personId$ = new BehaviorSubject<any>(null);
+
   constructor(
     private starWarsApi: StarWarsApiService,
-    private localState: SomePageState,
     private globalState: StarWarsPlaceService
   ) {}
 
   get person$(): Observable<any> {
-    return this.localState.getPerson$();
+    return this._person$.asObservable();
   }
 
   get place$(): Observable<any> {
@@ -34,7 +24,7 @@ export class SomePageSandbox implements ISomePageSandbox {
   }
 
   get personId$(): Observable<any> {
-    return this.localState.getPersonId$();
+    return this._personId$.asObservable();
   }
 
   get placeId$(): Observable<any> {
@@ -44,7 +34,7 @@ export class SomePageSandbox implements ISomePageSandbox {
   getPerson(id: number): void {
     this.starWarsApi
       .getPerson(id)
-      .subscribe((person) => this.localState.setPerson(person));
+      .subscribe((person) => this._person$.next(person));
   }
 
   getPlace(id: number): void {
@@ -54,7 +44,7 @@ export class SomePageSandbox implements ISomePageSandbox {
   }
 
   iteratePersonId(): void {
-    this.localState.iteratePersonId();
+    this._personId$.next(this._personId$.value + 1);
   }
 
   iteratePlaceId(): void {

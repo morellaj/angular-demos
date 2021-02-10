@@ -1,35 +1,19 @@
 import { Component } from '@angular/core';
-import { SomePageSandbox } from './some-page.sandbox';
-import { SomePageState } from './some-page.state';
-
-interface ISomePageComponent {
-  person: object;
-  personId: number;
-  place: object;
-  placeId: number;
-  personDisplay: string;
-  placeDisplay: string;
-  personIdDisplay: string;
-  placeIdDisplay: string;
-  onGetPerson: () => void;
-  onGetPlace: () => void;
-  onIteratePersonId: () => void;
-  onIteratePlaceId: () => void;
-}
+import { SomePageViewModel } from './some-page.view-model';
 
 @Component({
   selector: 'app-some-page',
   templateUrl: './some-page.component.html',
   styleUrls: ['./some-page.component.css'],
-  providers: [SomePageState, SomePageSandbox],
+  providers: [SomePageViewModel],
 })
-export class SomePageComponent implements ISomePageComponent {
+export class SomePageView {
   person: object;
   personId: number;
   place: object;
   placeId: number;
 
-  constructor(private sandbox: SomePageSandbox) {
+  constructor(private sandbox: SomePageViewModel) {
     this.sandbox.person$.subscribe((person) => (this.person = person));
     this.sandbox.personId$.subscribe((id) => (this.personId = id));
     this.sandbox.place$.subscribe((place) => (this.place = place));
@@ -38,7 +22,7 @@ export class SomePageComponent implements ISomePageComponent {
 
   //#region Event handlers
 
-  onGetPerson(): void {
+  getPerson(): void {
     this.sandbox.getPerson(this.personId);
   }
 
@@ -73,6 +57,5 @@ export class SomePageComponent implements ISomePageComponent {
   get placeIdDisplay(): string {
     return this.placeId.toString();
   }
-
   //#endregion
 }
