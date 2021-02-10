@@ -1,0 +1,17 @@
+<div>Person ID To Get</div>
+<div>{{ this.personIdDisplay }}</div>
+<app-iterate-id-button
+  (iterateId)="this.onIteratePersonId()"
+></app-iterate-id-button>
+<app-get-person-button (getPerson)="this.onGetPerson()"></app-get-person-button>
+
+<div>Person</div>
+<p>{{ this.personDisplay }}</p>
+
+<div>Place ID To Get</div>
+<div>{{ this.placeIdDisplay }}</div>
+<button (click)="this.onIteratePlaceId()">Iterate ID</button>
+<button (click)="this.onGetPlace()">Get Place</button>
+
+<div>Place</div>
+<p>{{ this.placeDisplay }}</p>
